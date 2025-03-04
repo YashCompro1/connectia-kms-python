@@ -7,10 +7,12 @@ from cryptography.hazmat.primitives import hashes
 import time
 import requests
 import os
+from flask_cors import CORS
 
 CONNECTIA_KEY = os.environ.get("CONNECTIA_KEY", "default_secret_key")
 
 app = Flask(__name__)
+CORS(app)  # Allow requests from all origins
 
 @app.route('/', methods=['GET'])
 def home():
