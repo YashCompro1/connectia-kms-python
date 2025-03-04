@@ -14,10 +14,13 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def home():
+    common()
     return jsonify({'message': 'working'})
 
 @app.route('/connectia', methods=['POST'])
 def connectia():
+
+    common()
 
     # Get token from request
     # Cambridge will be submitting a form with a base64 encoded token that contains payload and signature
@@ -84,6 +87,40 @@ def connectia():
 
     except Exception as e:
         return jsonify({"error": "token invalid"}), 401
+
+
+def common():
+    print ('-'*40)
+    headers = dict(request.headers)
+
+    print ('origin', request.origin, request.headers.get('origin'))
+    
+    # Get query parameters (GET requests)
+    query_params = request.args.to_dict()
+
+    # Get form data (POST requests)
+    form_data = request.form.to_dict()
+
+    # Get JSON data (POST requests with application/json)
+    json_data = request.get_json(silent=True)
+
+    # Get raw body (if needed)
+    raw_body = request.data.decode("utf-8")
+
+    # Get request method and remote address
+    method = request.method
+    ip_address = request.remote_addr
+
+    # Print everything in the console
+    print(f"Headers: {headers}")
+    print(f"Query Params: {query_params}")
+    print(f"Form Data: {form_data}")
+    print(f"JSON Data: {json_data}")
+    print(f"Raw Body: {raw_body}")
+    print(f"Method: {method}")
+    print(f"IP Address: {ip_address}")
+    print ('-'*40)
+
 
 if __name__ == '__main__':
     app.run()
